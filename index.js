@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
 
-module.exports = () => {
+module.exports = (options) => {
 
     // create a stream through which each file will pass
     return through.obj((file, enc, callback) => {
@@ -24,7 +24,7 @@ module.exports = () => {
         }
 
         if (file.isBuffer()) {
-            const $ = cheerio.load(String(file.contents));
+            const $ = cheerio.load(String(file.contents), options);
 
             $('img').each((index, element) => {
                 const $el = $(element);

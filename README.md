@@ -23,13 +23,17 @@ Convert and replace image-files within your DOM/HTML to base64-encoded data.
 var gulp = require('gulp');
 var image64 = require('gulp-image64');
 
+//cheerio load options
+var options = {
+	lowerCaseAttributeNames: false
+};
+
 gulp.task('default', function () {
 	gulp.src('index.html')
-		.pipe(image64())
+		.pipe(image64(options))
 		.pipe(gulp.dest('path'));
 });
 ```
-
 
 ##### index.html // Before...
 
@@ -55,3 +59,4 @@ gulp.task('default', function () {
 ...
 ```
 
+This plugin uses [cheerio](https://github.com/cheeriojs/cheerio) so any options passed in `image64(options)` function call will be passed into `cheerio.load` function. See [here](https://github.com/cheeriojs/cheerio#loading) for complete list of options.
