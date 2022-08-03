@@ -13,7 +13,9 @@ describe('gulp-image64', () => {
         const outputFilename = path.join(__dirname, '/fixtures/output.html');
 
         it('should replace images in DOM with base64 data', done => {
-            const stream = image64();
+            const stream = image64({
+                lowerCaseAttributeNames: false
+            });
             const input = new gutil.File({
                 base: path.dirname(inputFilename),
                 path: inputFilename,
@@ -29,11 +31,31 @@ describe('gulp-image64', () => {
         });
 
         it('should skip images with base64 data', done => {
-            const stream = image64();
+            const stream = image64({
+                lowerCaseAttributeNames: false
+            });
             const input = new gutil.File({
                 base: path.dirname(outputFilename),
                 path: outputFilename,
                 contents: new Buffer(fs.readFileSync(outputFilename, 'utf8'))
+            });
+
+            stream.on('data', newFile => {
+                assert.equal(String(newFile.contents), fs.readFileSync(outputFilename, 'utf8'));
+                done();
+            });
+
+            stream.write(input);
+        });
+
+        it('should pass cheerio options in load function', done => {
+            const stream = image64({
+                lowerCaseAttributeNames: false
+            });
+            const input = new gutil.File({
+                base: path.dirname(inputFilename),
+                path: inputFilename,
+                contents: new Buffer(fs.readFileSync(inputFilename, 'utf8'))
             });
 
             stream.on('data', newFile => {
